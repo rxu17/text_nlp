@@ -111,12 +111,12 @@ def custom_processing(input_df : pd.DataFrame,
                       col : str = None) -> pd.DataFrame:
     """Initial custom pre-processing for data.
        Fills NA
-       Combines DiagnosisOne and DiagnosisTwo columns"""
-    # combine diagnosis one and two
+       Combines NotesOne and NotesTwo columns"""
+    # combine notes one and two
     df = input_df.copy()
-    for col in ['DiagnosisOne', 'DiagnosisTwo']:
+    for col in ['NotesOne', 'NotesTwo']:
         df[col] = fillNA(df, col)
-    df['DiagnosisFull'] = df['DiagnosisOne'] + " " + df['DiagnosisTwo']
+    df['NotesFull'] = df['NotesOne'] + " " + df['NotesTwo']
     logging.info("Early dataset pre-processing done.")
     return(df)
 
