@@ -1,13 +1,12 @@
 # text_nlp
 Text analysis, cleaning and classification modeling
 # Main Libraries used
-<br>
-Text processing
+#### Text processing
 - pytesseract 0.3.9
 - opencv 3.4.2
 - pillow 9.0.1
-<br>
-Text classification
+
+#### Text classification
 - pandas 1.3.4
 - numpy 1.21.2
 - scikit-learn 0.23.2
