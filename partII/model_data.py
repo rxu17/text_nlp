@@ -30,30 +30,112 @@
     Contributors: rxu17
 '''
 
+import re
 import sys
 import preprocess_data as prep
 import pandas as pd
 
 # helper ML functions
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import(
+    GridSearchCV, cross_val_score
+)
 from sklearn.pipeline import Pipeline
+from sklearn.feature_extraction.text import(
+    CountVectorizer, TfidfTransformer,
+    TfidfVectorizer
+)
 
 # ML classification models to try
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
+from sklearn.linear_model import (
+    SGDClassifier,  LogisticRegression
+)
 import xgboost as xgb
 
 # scoring
-from sklearn import metrics
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import confusion_matrix
-from sklearn.model_selection import cross_val_score
+from sklearn.metrics import (
+    classification_report, accuracy_score, confusion_matrix, make_scorer
+)
 
-def find_best_model_params(model : object, X_train : pd.DataFrame,
-                           y_train : pd.DataFrame, hyperparams : dict,
-                           cv : int = 6) -> dict:
+
+def get_model(model_type :str) -> object:
+    ''' Get the model object based on given model type
+    '''
+    models = {"decision": DecisionTreeClassifier,
+             "naive": MultinomialNB,
+             "sdg":SGDClassifier,
+             "logistic": LogisticRegression}
+    return(models[model_type])
+
+
+def get_model_param_settings(model_type : str) -> dict:
+    ''' Gets the range of hyperparams for each model type
+        to have GridSearch iterate over
+    '''
+    if model_type == "decision":
+        hyperparams = {"max_depth":2,
+                    "min_samples_split":1,
+                    "min_samples_leaf":1}
+        hyperparams = {"max_depth":[1, 3, 5, 10, 15],
+                    "min_samples_split":[0.5, 3, 5, 10, 15],
+                    "min_samples_leaf":[1, 3, 5, 10, 15]}
+    elif model_type == "xgb":
+        hyperparams = {"max_depth":[1, 5, 10],
+                    "n_estimators":[10, 50, 100],
+                    "max_leaves":[1, 5, 10],
+                    "tree_method":["hist", "approx"]}
+    elif model_type == "naive":
+        hyperparams = {"alpha":0.001}
+        hyperparams = {"alpha":[0.001, 0.01, 0.1, 1]}
+        hyperparams = [{"clf":[get_model(model_type)()],
+                        "clf__alpha":[0.001, 0.01, 0.1, 1]}]
+    elif model_type == "logistic":
+        # choosing solvers
+        # For small datasets, ‘liblinear’ is a good choice, whereas ‘sag’ and ‘saga’ are faster for large ones;
+        # For multiclass problems, only ‘newton-cg’, ‘sag’, ‘saga’ and ‘lbfgs’ handle multinomial loss;
+        hyperparams = {"penalty":'elasticnet',
+                      "C":0.001,
+                      "solver":"saga",
+                      "l1_ratio":0.4}
+        hyperparams = {"penalty":['elasticnet'],
+                       "C":[0.001, 0.01, 0.1, 0.5],
+                       "solver":["saga"],
+                       "l1_ratio":[0.2, 0.3, 0.4, 0.5, 0.6, 0.7]}
+        hyperparams = [{"clf":[get_model(model_type)()],
+                        'clf__penalty': ['l1', 'l2'],
+                        'clf__C': [1.0, 0.5, 0.1],
+                        'clf__solver': ['liblinear']}]
+    elif model_type == "sdg":
+        hyperparams = {"loss":'hinge', 
+                       "penalty":'l2',
+                       "alpha":1e-3,
+                       "max_iter":5, 
+                       "tol":None}
+        hyperparams = {"loss":['hinge'], 
+                       "penalty":['l2'],
+                       "alpha":[1e-3, 1e-2, 1e-1, 1],
+                       "max_iter":[5], 
+                       "tol":[None]}
+        hyperparams = [{"clf":[get_model(model_type)()],
+                        'clf__penalty': ['l1', 'l2'],
+                        'clf__alpha':[1e-3, 1e-2, 1e-1, 1],
+                        'clf__max_iter': [5]}]
+    elif model_type == "svm":
+        hyperparams = [{"clf":[get_model(model_type)()],
+                        'clf__kernel': ['linear', 'rbf'], 
+                        'clf__C': [1, 2, 3, 4, 5, 6]}]
+    else:
+        raise ValueError("model_type passed doesn't exist")
+    return(hyperparams)
+
+
+def find_best_model_params(model : object, hyperparams : dict,
+                           X_train : pd.DataFrame,
+                           y_train : pd.DataFrame,
+                           cv : int = 10) -> dict:
     """Gridsearch function to find best model params
         given a dict of hyperparams
 
@@ -68,16 +150,15 @@ def find_best_model_params(model : object, X_train : pd.DataFrame,
     Returns:
         dict: of hyperparams and their best values
     """
-    if isinstance(X_train, pd.DataFrame):
-        train_df = X_train.to_numpy()
-    else:
-        train_df = X_train.copy()
-    search = GridSearchCV(estimator = model,
-                          param_grid=hyperparams,
-                          return_train_score=True,
-                          cv = cv).fit(X = train_df, 
-                                      y = y_train.to_numpy())
-    return(search.best_params_)
+    scoring = {'AUC':'roc_auc', 
+               'Accuracy' : make_scorer(accuracy_score)}
+    gs = GridSearchCV(estimator = model,
+                      param_grid=hyperparams,
+                      scoring = 'accuracy',
+                      n_jobs = -1, #use all processors
+                      cv = cv)
+    best_model = gs.fit(X = X_train, y = y_train)
+    return(best_model)
 
 
 def run_model(classifier, X_train, y_train, X_test, y_test, hyperparams= None):
@@ -93,16 +174,18 @@ def run_model(classifier, X_train, y_train, X_test, y_test, hyperparams= None):
         hyperparams (_type_, optional): contains each model's parameters and 
                     list of values for each param to iterate on. Defaults to None.
     """
-    best_params = find_best_model_params(model = classifier(),
+    model_pipe = Pipeline([('vect', CountVectorizer()),
+                           ('tfidf', TfidfTransformer()),
+                           ('clf', MultinomialNB())])
+    model_pipe = find_best_model_params(model = model_pipe,
+                                        hyperparams=hyperparams,
                                         X_train = X_train,
-                                        y_train = y_train, 
-                                        hyperparams = hyperparams)
-    model = classifier(**best_params).fit(X_train,y_train)
-    y_pred = model.predict(X_test)
+                                        y_train = y_train)
+    y_pred = model_pipe.predict(X_test)
     if y_test is not None:
         # Measuring accuracy on predicted results
-        print(metrics.classification_report(y_test, y_pred))
-        print(metrics.confusion_matrix(y_test, y_pred))
+        print(classification_report(y_test, y_pred))
+        print(confusion_matrix(y_test, y_pred))
         print(accuracy_score(y_test, y_pred))
     return(y_pred)
 
@@ -112,41 +195,38 @@ def main():
     test_filename = sys.argv[2]
     filedir = sys.argv[3]
     prep_steps = sys.argv[4].split(",")
-    text_cols = sys.argv[5].split(",")
+    text_col = sys.argv[5]
     target = sys.argv[6]
+    prep_results_saved = bool(int(sys.argv[7]))
+    model_type = sys.argv[8]
     
     # running models on validation data
-    train_df, test_df = prep.preprocess_w_nlp(
-        train_filename, test_filename, filedir, prep_steps, text_cols, is_test = False)
-    
-    hyperparams = {"max_depth":[1, 3, 5, 10, 15],
-                   "min_samples_split":[0.5, 3, 5, 10, 15],
-                   "min_samples_leaf":[1, 3, 5, 10, 15]}
-    run_model(DecisionTreeClassifier, X_train=train_df[text_cols], 
-             y_train=train_df[target], 
-             X_test = test_df[text_cols], 
-             y_test = test_df[target], hyperparams = hyperparams)
-    
-    hyperparams = {"max_depth":[1, 5, 10],
-                   "n_estimators":[10, 50, 100],
-                   "max_leaves":[1, 5, 10],
-                   "tree_method":["hist", "approx"]}
-    run_model(xgb.XGBClassifier, X_train=train_df[text_cols], 
-             y_train=train_df[target],
-             X_test = test_df[text_cols], 
-             y_test = test_df[target], hyperparams = hyperparams)
-    
+    X_train, X_test, y_train, y_test = prep.preprocess_w_nlp(
+        train_filename, test_filename, filedir, 
+        prep_steps, text_col, target, is_test = False,
+        results_saved = prep_results_saved)
+    model_inputs = {
+        "X_train": X_train, 
+        "y_train": y_train, 
+        "X_test": X_test, 
+        "y_test":y_test
+    }
+    for model_type in ['logistic', 'naive', 'sdg']:
+        model = get_model(model_type)
+        y_pred = run_model(model, **model_inputs, hyperparams = get_model_param_settings(model_type))
+        
     # predicting for actual test data
     train_df, test_df = prep.preprocess_w_nlp(
-        train_filename, test_filename, filedir, prep_steps, text_cols, is_test = True)
-    hyperparams = {"max_depth":[1, 3, 5, 10, 15],
-                   "min_samples_split":[0.5, 3, 5, 10, 15],
-                   "min_samples_leaf":[1, 3, 5, 10, 15]}
-    test_df[target] = run_model(DecisionTreeClassifier, X_train=train_df[text_cols], 
-                            y_train=train_df[target], 
-                            X_test = test_df[text_cols], 
-                            y_test = None, hyperparams = hyperparams)
+        train_filename, test_filename, filedir, 
+        prep_steps, text_col, target, is_test = True,
+        results_saved = prep_results_saved)
 
+    model_test_inputs = {
+        "X_train": X_train, 
+        "y_train": y_train, 
+        "X_test": X_test, 
+        "y_test": None
+    }
 
 if __name__ == "__main__":
     main()

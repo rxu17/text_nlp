@@ -279,8 +279,10 @@ def word2vec(train_df, test_df, col, word2vec_model : str = None):
 def preprocess_w_nlp(train_filename : str, 
                      test_filename : str,
                      filedir : str, steps : list=preprocess_steps().keys(), 
-                     text_cols : list = None, 
-                     is_test : bool = False) -> pd.DataFrame:
+                     text_col : str = None, 
+                     target : str = None,
+                     is_test : bool = False,
+                     results_saved : bool = False) -> pd.DataFrame:
     """Preprocesses data with functions from user input using preprocess_steps()
 
     Args:
@@ -289,32 +291,52 @@ def preprocess_w_nlp(train_filename : str,
         filedir (str): Input file directory for both test and training data
         steps (list, optional): Available steps are in preprocess_steps(). 
                 Defaults to preprocess_steps().keys().
-        text_cols (list, optional): list of columns to use as predictors. 
+        text_cols (str, optional): column to use as predictor. 
+                Defaults to None.
+        target (str, optional) : name of column that is the target variable.
                 Defaults to None.
         is_test (bool, optional) : Whether we're pre-processing our testing data 
                 or validation data (is_test = False). Defaults to False.
+        results_saved (bool, optional) : whether the preprocessed results
+                were saved or not, reads in results if saved and skips all 
+                of pre-precessing. Defaults to False
 
     Returns:
         pd.DataFrame: pre-processed train_df and test_df
     """
-    train_df = read_and_format(train_filename, filedir)
-    test_df = read_and_format(test_filename, filedir)
-    
-    # split into training and validation
-    train_df, validation_data = \
-        train_test_split(train_df, test_size=VALIDATION_SIZE, random_state=6)
-    prep_steps = preprocess_steps()
-    
-    # "test" data is validation if specified by is_test
-    test_df = validation_data.copy() if not is_test else test_df
-    for step in steps:
-        logging.info("Currently on step: {}".format(step))
-        # perform standardization on entire dataset
-        for text_col in text_cols:
+    if results_saved:
+        X_train = pd.read_csv("{}/X_train.csv".format(filedir))
+        X_test = pd.read_csv("{}/X_test.csv".format(filedir))
+        y_train = pd.read_csv("{}/y_train.csv".format(filedir))
+        y_test = pd.read_csv("{}/y_test.csv".format(filedir))
+    else:
+        train_df = read_and_format(train_filename, filedir)
+        X_test = read_and_format(test_filename, filedir)
+        
+        # split into training and validation
+        X_train, X_valid, y_train, y_valid = \
+            train_test_split(train_df[[text_col]], train_df[target],
+                            test_size=VALIDATION_SIZE, random_state=6)
+        prep_steps = preprocess_steps()
+        
+        # "test" data is validation if specified by is_test
+        X_test = X_valid.copy() if not is_test else X_test
+        y_test = y_valid.copy() if not is_test else None
+        for step in steps:
+            logging.info("Currently on step: {}".format(step))
+            # perform standardization on entire dataset
             if prep_steps[int(step)].__name__ == "vectorize":
-                train_df[text_col], test_df[text_col] = prep_steps[int(step)](train_df, test_df, text_col)
+                X_train[text_col], X_test[text_col] = prep_steps[int(step)](X_train, X_test, text_col)
             else:
-                train_df[text_col] = prep_steps[int(step)](train_df, text_col)
-                test_df[text_col] = prep_steps[int(step)](test_df, text_col)
-    
-    return(train_df, test_df)
+                X_train[text_col] = prep_steps[int(step)](X_train, text_col)
+                X_test[text_col] = prep_steps[int(step)](X_test, text_col)
+        
+        # combine all words together in long string
+        X_train[text_col] = X_train[text_col].apply(lambda x : " ".join(x))
+        X_test[text_col] = X_test[text_col].apply(lambda x : " ".join(x))
+        
+        X_train.to_csv("{}/X_train.csv".format(filedir), index=False)
+        X_test.to_csv("{}/X_test.csv".format(filedir), index=False)
+        y_train.to_csv("{}/y_train.csv".format(filedir), index=False)
+        y_test.to_csv("{}/y_test.csv".format(filedir), index=False)
+    return(X_train[text_col], X_test[text_col], y_train, y_test)
