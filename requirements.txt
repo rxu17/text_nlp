@@ -1,115 +1,118 @@
 appdirs==1.4.4
-appnope @ file:///opt/concourse/worker/volumes/live/4f734db2-9ca8-4d8b-5b29-6ca15b4b4772/volume/appnope_1606859466979/work
-argon2-cffi @ file:///opt/conda/conda-bld/argon2-cffi_1645000214183/work
-argon2-cffi-bindings @ file:///opt/concourse/worker/volumes/live/c6f9b05d-dc80-4dbc-7473-70bfcb66883c/volume/argon2-cffi-bindings_1644569703264/work
-attrs @ file:///opt/conda/conda-bld/attrs_1642510447205/work
-backcall @ file:///home/ktietz/src/ci/backcall_1611930011877/work
-bleach @ file:///opt/conda/conda-bld/bleach_1641577558959/work
+appnope==0.1.2
+argon2-cffi==21.3.0
+argon2-cffi-bindings==21.2.0
+attrs==21.4.0
+backcall==0.2.0
+bleach==4.1.0
 boto==2.49.0
 boto3==1.9.66
 botocore==1.12.67
 Bottleneck==1.3.2
 certifi==2021.10.8
-cffi @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/croot-2p6q7e2r/cffi_1642701115063/work
+cffi==1.15.0
 chardet==3.0.4
-click @ file:///opt/concourse/worker/volumes/live/42b55757-67b9-4a67-4429-e65a7264b929/volume/click_1646056605766/work
-colorama @ file:///tmp/build/80754af9/colorama_1607707115595/work
-cryptography @ file:///opt/concourse/worker/volumes/live/449c9d42-da39-4138-6bf0-843317a1ad24/volume/cryptography_1601046862310/work
-cycler @ file:///tmp/build/80754af9/cycler_1637851556182/work
-Cython @ file:///Users/runner/miniforge3/conda-bld/cython_1645125554400/work
-debugpy @ file:///opt/concourse/worker/volumes/live/32b11d06-4d64-4ec8-497a-cf4fc97343d2/volume/debugpy_1637091821874/work
-decorator @ file:///opt/conda/conda-bld/decorator_1643638310831/work
-defusedxml @ file:///tmp/build/80754af9/defusedxml_1615228127516/work
-distlib @ file:///tmp/build/80754af9/distlib_1622544193819/work
+click==8.0.4
+colorama==0.4.4
+cryptography==3.1.1
+cycler==0.11.0
+Cython==0.29.28
+debugpy==1.5.1
+decorator==5.1.1
+defusedxml==0.7.1
+distlib==0.3.2
 docutils==0.16
 entrypoints==0.3
-execnet @ file:///tmp/build/80754af9/execnet_1623921183358/work
-filelock @ file:///opt/conda/conda-bld/filelock_1647002191454/work
+execnet==1.9.0
+filelock==3.6.0
 fonttools==4.25.0
 gensim==3.8.0
-idna @ file:///tmp/build/80754af9/idna_1593446292537/work
-importlib-metadata @ file:///opt/concourse/worker/volumes/live/6e6ff5a0-f7a2-4c13-69e3-2158eeeea26b/volume/importlib-metadata_1638542890158/work
-iniconfig @ file:///home/linux1/recipes/ci/iniconfig_1610983019677/work
-ipykernel @ file:///opt/concourse/worker/volumes/live/c21734a4-132a-471d-7fe9-76688d5488be/volume/ipykernel_1647000841085/work/dist/ipykernel-6.9.1-py3-none-any.whl
-ipython @ file:///opt/concourse/worker/volumes/live/333da4fb-3db0-439c-4a1b-ee802c44da4f/volume/ipython_1643818165055/work
-ipython-genutils @ file:///tmp/build/80754af9/ipython_genutils_1606773439826/work
-ipywidgets @ file:///tmp/build/80754af9/ipywidgets_1634143127070/work
-jedi @ file:///opt/concourse/worker/volumes/live/c9d2fa99-8bc1-4572-41e7-6beba6391441/volume/jedi_1644315238822/work
-Jinja2 @ file:///opt/conda/conda-bld/jinja2_1647436528585/work
-jmespath @ file:///tmp/build/80754af9/jmespath_1594304593830/work
-joblib @ file:///tmp/build/80754af9/joblib_1601912903842/work
-jsonschema @ file:///Users/ktietz/demo/mc3/conda-bld/jsonschema_1630511932244/work
+idna==2.10
+importlib-metadata==4.8.2
+iniconfig==1.1.1
+ipykernel==6.9.1
+ipython==7.31.1
+ipython-genutils==0.2.0
+ipywidgets==7.6.5
+jedi==0.18.1
+Jinja2==3.0.3
+jmespath==0.10.0
+joblib==0.17.0
+jsonschema==3.2.0
 jupyter==1.0.0
-jupyter-client @ file:///opt/conda/conda-bld/jupyter_client_1643638337975/work
-jupyter-console @ file:///opt/conda/conda-bld/jupyter_console_1647002188872/work
-jupyter-core @ file:///opt/concourse/worker/volumes/live/b49dfe5a-aa7f-4da7-60c3-fdd95ee78394/volume/jupyter_core_1646994453026/work
-jupyterlab-pygments @ file:///tmp/build/80754af9/jupyterlab_pygments_1601490720602/work
-jupyterlab-widgets @ file:///tmp/build/80754af9/jupyterlab_widgets_1609884341231/work
-kiwisolver @ file:///Users/builder/miniconda3/envs/prefect/conda-bld/kiwisolver_1638569885739/work
-MarkupSafe @ file:///opt/concourse/worker/volumes/live/2165c944-5d03-464f-57c1-1df4e51b3ac3/volume/markupsafe_1621528146825/work
-matplotlib @ file:///opt/concourse/worker/volumes/live/0da721da-13cb-462d-69c8-9ee9bb3461fb/volume/matplotlib-suite_1645455704170/work
-matplotlib-inline @ file:///tmp/build/80754af9/matplotlib-inline_1628242447089/work
+jupyter-client==7.1.2
+jupyter-console==6.4.3
+jupyter-core==4.9.2
+jupyterlab-pygments==0.1.2
+jupyterlab-widgets==1.0.0
+kiwisolver==1.3.2
+MarkupSafe==2.0.1
+matplotlib==3.5.1
+matplotlib-inline==0.1.2
 mistune==0.8.4
 mkl-fft==1.3.1
-mkl-random @ file:///opt/concourse/worker/volumes/live/133f1d0b-8fd8-4fa0-679e-7214401cbd75/volume/mkl_random_1626186083386/work
+mkl-random==1.2.2
 mkl-service==2.4.0
 munkres==1.1.4
-nbclient @ file:///tmp/build/80754af9/nbclient_1645431659072/work
-nbconvert @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/croot-r4wh23j5/nbconvert_1641309205559/work
-nbformat @ file:///tmp/build/80754af9/nbformat_1617383369282/work
-nest-asyncio @ file:///tmp/build/80754af9/nest-asyncio_1613680548246/work
-nltk @ file:///opt/conda/conda-bld/nltk_1645628263994/work
-notebook @ file:///opt/concourse/worker/volumes/live/cd460127-b2af-410b-4512-5d8138402374/volume/notebook_1645002559399/work
-numexpr @ file:///opt/concourse/worker/volumes/live/31f789a7-fce9-494f-674c-12823dc17ce2/volume/numexpr_1640704257511/work
-numpy @ file:///opt/concourse/worker/volumes/live/046e897c-3622-47d5-79cf-02f72d341f0d/volume/numpy_and_numpy_base_1634106712173/work
-packaging @ file:///tmp/build/80754af9/packaging_1637314298585/work
+nbclient==0.5.11
+nbconvert==6.3.0
+nbformat==5.1.3
+nest-asyncio==1.5.1
+nltk==3.7
+notebook==6.4.8
+numexpr==2.8.1
+numpy==1.21.2
+packaging==21.3
 pandas==1.3.4
-pandocfilters @ file:///opt/conda/conda-bld/pandocfilters_1643405455980/work
-parso @ file:///opt/conda/conda-bld/parso_1641458642106/work
-pexpect @ file:///tmp/build/80754af9/pexpect_1605563209008/work
-pickleshare @ file:///tmp/build/80754af9/pickleshare_1606932040724/work
+pandocfilters==1.5.0
+parso==0.8.3
+pexpect==4.8.0
+pickleshare==0.7.5
 Pillow==9.0.1
-pluggy @ file:///opt/concourse/worker/volumes/live/f85b5d5a-abad-4f46-46ad-4ead594efa77/volume/pluggy_1615976299968/work
-prometheus-client @ file:///opt/conda/conda-bld/prometheus_client_1643788673601/work
-prompt-toolkit @ file:///tmp/build/80754af9/prompt-toolkit_1633440160888/work
-ptyprocess @ file:///tmp/build/80754af9/ptyprocess_1609355006118/work/dist/ptyprocess-0.7.0-py2.py3-none-any.whl
-py @ file:///opt/conda/conda-bld/py_1644396412707/work
-pycparser @ file:///tmp/build/80754af9/pycparser_1636541352034/work
-Pygments @ file:///opt/conda/conda-bld/pygments_1644249106324/work
-pyOpenSSL @ file:///tmp/build/80754af9/pyopenssl_1594392929924/work
-pyparsing @ file:///tmp/build/80754af9/pyparsing_1635766073266/work
-pyrsistent @ file:///opt/concourse/worker/volumes/live/24b7a9ab-37d8-463c-575f-69184f9cfbc8/volume/pyrsistent_1636111022304/work
+pip==21.2.2
+pluggy==0.13.1
+prometheus-client==0.13.1
+prompt-toolkit==3.0.20
+ptyprocess==0.7.0
+py==1.11.0
+pycparser==2.21
+Pygments==2.11.2
+pyOpenSSL==19.1.0
+pyparsing==3.0.4
+pyrsistent==0.18.0
 PySocks==1.7.1
-pytesseract @ file:///home/conda/feedstock_root/build_artifacts/pytesseract_1643232933150/work
+pytesseract==0.3.9
 pytest==6.2.5
-pytest-forked @ file:///home/ktietz/src/ci_ipy2/pytest-forked_1612520962786/work
-pytest-xdist @ file:///tmp/build/80754af9/pytest-xdist_1624451836165/work
-python-dateutil @ file:///tmp/build/80754af9/python-dateutil_1626374649649/work
+pytest-forked==1.3.0
+pytest-xdist==2.3.0
+python-dateutil==2.8.2
 pytz==2021.3
-pyzmq @ file:///opt/concourse/worker/volumes/live/7dec6841-64b1-4d95-7226-ce37c6ca8915/volume/pyzmq_1638435000749/work
-qtconsole @ file:///opt/conda/conda-bld/qtconsole_1643819126524/work
-QtPy @ file:///opt/conda/conda-bld/qtpy_1643087291789/work
-regex @ file:///private/var/folders/sy/f16zz6x50xz3113nwtb9bvq00000gp/T/croot-325xby49/regex_1642021452041/work
-requests @ file:///tmp/build/80754af9/requests_1592841827918/work
+pyzmq==22.3.0
+qtconsole==5.2.2
+QtPy==1.11.2
+regex==2021.11.2
+requests==2.24.0
 s3transfer==0.1.13
-scikit-learn @ file:///opt/concourse/worker/volumes/live/2dacdc11-21e7-44f5-57b4-6b8eb6ceb626/volume/scikit-learn_1598376924598/work
-scipy @ file:///opt/concourse/worker/volumes/live/719943d5-6e16-41f8-68c4-f5820b33d300/volume/scipy_1641557782170/work
-Send2Trash @ file:///tmp/build/80754af9/send2trash_1632406701022/work
-six @ file:///tmp/build/80754af9/six_1644875935023/work
+scikit-learn==0.23.2
+scipy==1.7.3
+Send2Trash==1.8.0
+setuptools==58.0.4
+six==1.16.0
 smart-open==1.8.0
-terminado @ file:///opt/concourse/worker/volumes/live/9f5c2831-bf90-4436-71cc-89a70d3fece2/volume/terminado_1644322615956/work
-testpath @ file:///tmp/build/80754af9/testpath_1624638946665/work
-threadpoolctl @ file:///tmp/tmp9twdgx9k/threadpoolctl-2.1.0-py3-none-any.whl
-toml @ file:///tmp/build/80754af9/toml_1616166611790/work
-tornado @ file:///opt/concourse/worker/volumes/live/d531d395-893c-4ca1-6a5f-717b318eb08c/volume/tornado_1606942307627/work
-tox @ file:///Users/runner/miniforge3/conda-bld/tox_1640788715475/work
-tqdm @ file:///opt/conda/conda-bld/tqdm_1647339053476/work
-traitlets @ file:///tmp/build/80754af9/traitlets_1636710298902/work
-typing-extensions @ file:///tmp/build/80754af9/typing_extensions_1631814937681/work
+terminado==0.13.1
+testpath==0.5.0
+threadpoolctl==2.1.0
+toml==0.10.2
+tornado==6.1
+tox==3.24.5
+tqdm==4.63.0
+traitlets==5.1.1
+typing-extensions==3.10.0.2
 urllib3==1.24.3
-virtualenv @ file:///opt/concourse/worker/volumes/live/2cc27427-aa58-4aaa-68d6-d85b7c4a291a/volume/virtualenv_1620977671857/work
-wcwidth @ file:///Users/ktietz/demo/mc3/conda-bld/wcwidth_1629357192024/work
+virtualenv==20.4.6
+wcwidth==0.2.5
 webencodings==0.5.1
-widgetsnbextension @ file:///opt/concourse/worker/volumes/live/d0e5739b-8078-4a19-69bb-be63aeed72df/volume/widgetsnbextension_1645009381873/work
+wheel==0.37.1
+widgetsnbextension==3.5.2
 xgboost==1.5.1
-zipp @ file:///opt/conda/conda-bld/zipp_1641824620731/work
+zipp==3.7.0
